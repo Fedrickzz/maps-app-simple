@@ -11,9 +11,12 @@ export const MapView = () => {
   const mapDiv = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && mapDiv.current) {
+      while (mapDiv.current.firstChild) {
+        mapDiv.current.removeChild(mapDiv.current.firstChild);
+      }
       const map = new Map({
-        container: mapDiv.current!, // container ID
+        container: mapDiv.current, // container ID
         style: 'mapbox://styles/mapbox/light-v10', // style URL
         center: userLocation, // starting position [lng, lat]
         zoom: 14, // starting zoom
@@ -21,7 +24,7 @@ export const MapView = () => {
 
       setMap(map);
     }
-  }, [isLoading, setMap, userLocation]);
+  }, [isLoading]);
 
   if (isLoading) {
     return <Loading />;
